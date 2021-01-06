@@ -103,6 +103,64 @@ resource "aws_security_group" "sg_app" {
 
 # NCLS. --- Task 1
 
+resource "aws_network_acl" "public_nacl" {
+  vpc_id      = aws_vpc.vpc-terraform-name.id
+  subnet_ids = [aws_subnet.subnet-public.id]
+
+  # OUT
+  # port 80
+  # port 443
+  # Ephemeral ports 1024-65575
+  egress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
+  }
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 80
+    to_port    = 80
+  }
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 200
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 443
+    to_port    = 443
+  }
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 300
+    action     = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port  = 1024
+    to_port    = 65535
+  }
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 400
+    action     = "allow"
+    cidr_block = "85.240.168.69/32"
+    from_port  = 22
+    to_port    = 22
+  }
+
+  # IN
+  # Port 22
+  # Port 80
+  # Port 443
+  # Ephemeral ports 1024-65575
+
+}
+
 
 # move the app into the subnet ad try to get tge 502 error on port 80
 
