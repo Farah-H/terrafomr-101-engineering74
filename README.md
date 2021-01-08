@@ -41,12 +41,12 @@ Terraform allows us to do that dynamically using the resource, it's name and the
 
 Example:
 We wanted the id of a vpc that had not been created, we used the vpc resource followed by the name and the parameter VPC_ID.
-
+```json
   #reference vpc_id dynamically by:
   # calling the resource,
   # followed by the name of the resource
   # followed by the parameter you want
-
+```
 
 ## Terraform commands
 
