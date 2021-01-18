@@ -11,3 +11,5 @@ resource "aws_instance" "db_instance" {
 
     key_name = var.ssh_key
 }
+
+# might need to SSH in to restart mongodb and provision with correct ports 

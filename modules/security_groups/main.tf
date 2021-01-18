@@ -1,7 +1,7 @@
 resource "aws_security_group" "sg_app" {
-  name        = "public_sg_for_app_Filipe"
+  name        = "app_sg"
   description = "allows traffic to app"
-  vpc_id      = var.vpc-terraform-name-id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "HTTPS from anywhere"
@@ -12,11 +12,12 @@ resource "aws_security_group" "sg_app" {
   }
 
   ingress {
+    # increment: make variable for my_ip
     description = "port 22 from my ip"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["85.240.168.69/32"]
+    cidr_blocks = ["2.28.154.108/32"]
   }
 
   ingress {
@@ -32,7 +33,7 @@ resource "aws_security_group" "sg_app" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["85.240.168.69/32"]
+    cidr_blocks = ["2.28.154.108/32"]
   }
 
   egress {
@@ -43,21 +44,34 @@ resource "aws_security_group" "sg_app" {
   }
 
   tags = {
-    Name = "${var.eng_class_person}sg_app_terraform"
+    Name = "eng74-farah-sg-app-terraform"
   }
 }
 
 # using the sg_app_id to make a DB sg
-resource {
-  name = "db_sg_for_app_farah"
+resource "aws_security_group" "sg_db"{
+  name = "db_sg"
   description = "allows traffic to DB from app"
-  vpc_id = aws_vpc.vpc-terraform-name.id
+  vpc_id = var.vpc_id
 
 
   ingress {
     from_port = 27017
     to_port = 27017
     protoccol = "tcp"
-    security_groups = [module.app.security_groups]
+    security_groups = [aws_security_group.app_sg.id]
+  }
+
+	egress {
+		description = "All traffic out"
+		from_port = 0
+		to_port = 0
+		protocol = "-1"
+		cidr_blocks = ["0.0.0.0/0"]
+
+	}
+
+  tags = {
+    Name = "eng74-farah-terraform-db-sg"
   }
 }

@@ -1,22 +1,22 @@
-# Create a VPC
-resource "aws_vpc" "vpc-terraform-name" {
+# VPC
+resource "aws_vpc" "app_vpc" {
   cidr_block       = "12.0.0.0/16"
   instance_tenancy = "default"
 
   tags = {
-    Name = "${var.eng_class_person}vpc_terraform"
+    Name = "eng74_farah_vpc_terraform"
   }
 }
 
 # IGW
-resource "aws_internet_gateway" "gw" {
+resource "aws_internet_gateway" "igw" {
   #reference vpc_id dynamically by:
   # calling the resource,
   # followed by the name of the resource
   # followed by the parameter you want
-  vpc_id = aws_vpc.vpc-terraform-name.id
+  vpc_id = aws_vpc.app_vpc.id
 
   tags = {
-    Name = "${var.eng_class_person}igw_terraform"
+    Name = "eng74_farah_igw_terraform"
   }
 }
